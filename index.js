@@ -10,7 +10,12 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-  console.log('a user connected');
+  var user_color = 'rgb(' + (Math.floor((256-229)*Math.random()) + 230) + ',' + 
+                            (Math.floor((256-229)*Math.random()) + 230) + ',' + 
+                            (Math.floor((256-229)*Math.random()) + 230) + ')';
+
+  socket.emit('color', user_color);
+  console.log('a user connected with color', user_color);
 
   socket.on('disconnect', function() {
     console.log('user disconnected');
@@ -21,7 +26,7 @@ io.on('connection', function(socket) {
   });
 });
 
-var port = (process.env.PORT || 5000);
+var port = (process.env.PORT || 3000);
 
 http.listen(port, function() {
   console.log("listening on port", port);
