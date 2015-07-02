@@ -5,6 +5,7 @@ body, html {
 body {
   background-color: #34495e;
   font-size: 16px;
+  font-family: "Roboto", sans-serif;
 }
 
 .wrap {
@@ -12,10 +13,8 @@ body {
   top: 50%;
   transform: translateY(-50%);
   width: 500px;
-  background-color: white;
   height: 100vh;
   margin: 0 auto;
-  background-color: #ecf0f1;
   max-height: 700px;
 }
 
@@ -26,6 +25,7 @@ form {
   width: 100%;
   padding: 10px;
   background-color: #2c3e50;
+  border-radius: 0 0 5px 5px;
 
   #m {
     box-sizing: border-box;
@@ -65,11 +65,36 @@ form {
 }
 
 #messages {
-  height: calc(100% - 61px);
-  overflow: auto;
+  height: calc(100% - 61px - 50px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #ecf0f1;
 
   div {
+    overflow-x: auto;
     box-sizing: border-box;
     padding: 10px;
+  }
+}
+
+header {
+  height: 50px;
+  background-color: #2c3e50;
+  border-radius: 5px 5px 0 0;
+  color: white;
+  
+  .data {
+    text-align: center;
+    line-height: 50px;
+  }
+
+  i {
+    font-size: 1.5rem;
+  }
+  span {
+    position: relative;
+    left: 7px;
+    top: -2px;
+    font-size: 1rem;
   }
 }

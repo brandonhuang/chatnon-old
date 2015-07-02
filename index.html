@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Socket Chat</title>
+  <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://necolas.github.io/normalize.css/3.0.2/normalize.css">
+  <link rel="stylesheet" href="fontello.css">
   <link rel="stylesheet" href="style.css">
   <script src="/socket.io/socket.io.js"></script>
   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
@@ -11,6 +13,12 @@
 </head>
 <body>
   <div class="wrap">
+    <header>
+      <div class="data">
+        <span id="users"></span>
+        <i class="icon-user"></i>
+      </div>
+    </header>
     <div id="messages"></div>
     <form>
       <input id="m" autocomplete="off" /><button>Send</button>

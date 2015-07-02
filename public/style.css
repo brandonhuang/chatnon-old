@@ -3,17 +3,16 @@ body, html {
 
 body {
   background-color: #34495e;
-  font-size: 16px; }
+  font-size: 16px;
+  font-family: "Roboto", sans-serif; }
 
 .wrap {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
   width: 500px;
-  background-color: white;
   height: 100vh;
   margin: 0 auto;
-  background-color: #ecf0f1;
   max-height: 700px; }
 
 form {
@@ -22,7 +21,8 @@ form {
   bottom: 0;
   width: 100%;
   padding: 10px;
-  background-color: #2c3e50; }
+  background-color: #2c3e50;
+  border-radius: 0 0 5px 5px; }
   form #m {
     box-sizing: border-box;
     border: 0;
@@ -51,10 +51,29 @@ form {
       outline: none; }
 
 #messages {
-  height: calc(100% - 61px);
-  overflow: auto; }
+  height: calc(100% - 61px - 50px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #ecf0f1; }
   #messages div {
+    overflow-x: auto;
     box-sizing: border-box;
     padding: 10px; }
+
+header {
+  height: 50px;
+  background-color: #2c3e50;
+  border-radius: 5px 5px 0 0;
+  color: white; }
+  header .data {
+    text-align: center;
+    line-height: 50px; }
+  header i {
+    font-size: 1.5rem; }
+  header span {
+    position: relative;
+    left: 7px;
+    top: -2px;
+    font-size: 1rem; }
 
 /*# sourceMappingURL=style.css.map */
