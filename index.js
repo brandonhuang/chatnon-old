@@ -12,9 +12,9 @@ app.get('/', function(req, res) {
 
 io.on('connection', function(socket) {
   // Generate custom color for new user
-  var user_color = 'rgb(' + (Math.floor((256-229)*Math.random()) + 230) + ',' + 
-                            (Math.floor((256-229)*Math.random()) + 230) + ',' + 
-                            (Math.floor((256-229)*Math.random()) + 230) + ')';
+  var user_color = 'rgb(' + (Math.floor((256-229)*Math.random()) + 210) + ',' + 
+                            (Math.floor((256-229)*Math.random()) + 210) + ',' + 
+                            (Math.floor((256-229)*Math.random()) + 210) + ')';
   console.log('a user connected with color', user_color);
 
   // Send user their color
