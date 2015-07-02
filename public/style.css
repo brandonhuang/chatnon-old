@@ -10,10 +10,11 @@ body {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
-  width: 500px;
+  width: 100vw;
   height: 100vh;
   margin: 0 auto;
-  max-height: 700px; }
+  max-height: 700px;
+  max-width: 500px; }
 
 form {
   box-sizing: border-box;

@@ -25,7 +25,6 @@ $(function() {
   });
 
   socket.on('user connect', function(users) {
-    console.log(users);
     displayUsers(users);
   });
 
