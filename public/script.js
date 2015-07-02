@@ -37,8 +37,7 @@ $(function() {
     locations.forEach(function(position) {
       marker = new google.maps.Marker({
         position: { lat: position.latitude, lng: position.longitude },
-        map: map,
-        animation: google.maps.Animation.DROP
+        map: map
       });
 
       markers.push(marker);
