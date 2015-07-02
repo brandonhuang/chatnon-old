@@ -32,7 +32,12 @@ io.on('connection', function(socket) {
 
   socket.on('chat message', function(msg) {
     console.log(msg);
-    socket.broadcast.emit('chat message', msg);
+    io.emit('chat message', msg);
+  });
+
+  socket.on('position', function(position) {
+    position.id = socket.id;
+    io.emit('new position', position);
   });
 });
 

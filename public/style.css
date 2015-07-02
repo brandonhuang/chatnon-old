@@ -16,6 +16,9 @@ body {
   max-height: 700px;
   max-width: 500px; }
 
+#chat {
+  height: 100%; }
+
 form {
   box-sizing: border-box;
   position: absolute;
