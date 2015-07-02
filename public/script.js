@@ -22,16 +22,26 @@ $(function() {
     userColor = color;
   });
 
-  socket.on('user connect', function(users) {
+  socket.on('users update', function(users) {
     displayUsers(users);
   });
 
-  socket.on('user disconnect', function(users) {
-    displayUsers(users);
-  });
+  socket.on('locations update', function(locations) {
+    console.log(locations);
 
-  socket.on('new position', function(position) {
-    console.log(position);
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+    }
+    markers = [];
+
+    locations.forEach(function(position) {
+      marker = new google.maps.Marker({
+        position: { lat: position.latitude, lng: position.longitude },
+        map: map,
+      });
+
+      markers.push(marker);
+    });
   });
 
   // Geolocation
@@ -49,8 +59,42 @@ $(function() {
   function geoSuccess(location) {
     position = {
       latitude: location.coords.latitude,
-      longitute: location.coords.longitude
+      longitude: location.coords.longitude
     };
     socket.emit('position', position);
   };
 });
+
+// Google Maps Code
+var map;
+var markers = [];
+
+function initialize() {
+  var mapOptions = {
+    center: { lat: 49.863735, lng: -100.556513 },
+    zoom: 3,
+    disableDefaultUI: true
+  };
+  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -8,9 +8,9 @@ var server = app.listen(app.get('port'), function() {
 });
 
 var io = require('socket.io').listen(server);
+
 var users = 0;
-
-
+var locations = [];
 
 app.use(express.static('public'));
 
@@ -30,11 +30,20 @@ io.on('connection', function(socket) {
 
   // Update current connections
   users++;
-  io.emit('user connect', users);
+  io.emit('users update', users);
 
   socket.on('disconnect', function() {
     users--;
-    io.emit('user disconnect', users);
+
+    for(var i = 0; i < locations.length; i++) {
+      if(locations[i].id == socket.id) {
+        locations.splice(i, 1);
+        break;
+      }
+    }
+
+    io.emit('locations update', locations);
+    io.emit('users update', users);
     console.log('user disconnected');
   });
 
@@ -45,6 +54,7 @@ io.on('connection', function(socket) {
 
   socket.on('position', function(position) {
     position.id = socket.id;
-    io.emit('new position', position);
+    locations.push(position);
+    io.emit('locations update', locations);
   });
 });
