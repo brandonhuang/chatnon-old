@@ -20,9 +20,7 @@ app.get('/', function(req, res) {
 
 io.on('connection', function(socket) {
   // Generate custom color for new user
-  var user_color = 'rgb(' + (Math.floor((256-229)*Math.random()) + 210) + ',' + 
-                            (Math.floor((256-229)*Math.random()) + 210) + ',' + 
-                            (Math.floor((256-229)*Math.random()) + 210) + ')';
+  var user_color = generatePastelColor();
   console.log('a user connected with color', user_color);
 
   // Send user their color
@@ -48,7 +46,9 @@ io.on('connection', function(socket) {
   });
 
   socket.on('chat message', function(msg) {
+
     io.emit('chat message', msg);
+
   });
 
   socket.on('position', function(position) {
@@ -59,3 +59,9 @@ io.on('connection', function(socket) {
     io.emit('locations update', locations);
   });
 });
+
+function generatePastelColor() {
+  var hue = Math.floor(Math.random() * 360);
+  var pastel = 'hsl('+ hue +', 40%, 80%)';
+  return pastel;
+}
