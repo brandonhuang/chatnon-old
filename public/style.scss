@@ -130,6 +130,8 @@ header {
   .wrap {
     max-width: 500px;
     max-height: 100vh;
+    top: 0;
+    transform: none;
   }
   #chat, #map {
     border-radius: 0;
