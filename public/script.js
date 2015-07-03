@@ -96,7 +96,7 @@ function initialize() {
     scrollwheel: false,
     zoomControl: true
   };
-  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
 
 }
 
