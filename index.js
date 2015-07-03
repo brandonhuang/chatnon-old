@@ -53,8 +53,8 @@ io.on('connection', function(socket) {
 
   socket.on('position', function(position) {
     position.id = socket.id;
-    position.longitude = position.longitude.toFixed(3);
-    position.latitude = position.latitude.toFixed(3);
+    position.longitude = Math.round(position.longitude * 100)/100;
+    position.latitude = Math.round(position.latitude * 100)/100;
     locations.push(position);
     io.emit('locations update', locations);
   });
