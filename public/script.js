@@ -92,7 +92,9 @@ function initialize() {
   var mapOptions = {
     center: { lat: 49.863735, lng: -100.556513 },
     zoom: 3,
-    disableDefaultUI: true
+    disableDefaultUI: true,
+    scrollwheel: false,
+    zoomControl: true
   };
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
