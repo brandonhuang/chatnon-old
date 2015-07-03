@@ -1,3 +1,3 @@
 # Chatnonymous
 
-[Live Server](chatnonymous.herokuapp.com])
+[Live Server](http://chatnonymous.herokuapp.com/)
