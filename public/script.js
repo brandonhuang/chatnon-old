@@ -10,7 +10,7 @@ $(function() {
       userColor: userColor
     }
 
-    if(msgRate > 5) {
+    if(msgRate > 3) {
       userTimeout();
     }
 
