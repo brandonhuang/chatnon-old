@@ -55,6 +55,10 @@ $(function() {
     });
   });
 
+  $('#mobile-arrow').on('click', function() {
+    $("html, body").animate({scrollTop: '0px'});
+  });
+
   // Geolocation
   navigator.geolocation.getCurrentPosition(geoSuccess);
 
