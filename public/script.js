@@ -15,7 +15,7 @@ $(function() {
 
   socket.on('chat message', function(msg){
     displayMessage(msg);
-    $("#messages").animate({scrollTop: $('#messages')[0].scrollHeight}, 350);
+    $("#messages").scrollTop($('#messages')[0].scrollHeight);
   });
 
   socket.on('color', function(color){
