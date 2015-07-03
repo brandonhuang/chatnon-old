@@ -14,7 +14,7 @@ var locations = [];
 
 app.use(express.static('public'));
 
-app.get('/', function(req, res) 
+app.get('/', function(req, res) {
   var user_color = generatePastelColor();
   console.log('a user connected with color', user_color);
 
