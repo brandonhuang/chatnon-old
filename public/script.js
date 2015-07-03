@@ -2,6 +2,7 @@ $(function() {
   var socket = io();
   var userColor;
   var msgRate = 0;
+  var state;
 
   $('form').submit(function() {
     msg = {
@@ -28,6 +29,7 @@ $(function() {
 
   socket.on('chat message', function(msg){
     displayMessage(msg);
+    displayNotification();
     $("#messages").scrollTop($('#messages')[0].scrollHeight);
   });
 
@@ -59,6 +61,14 @@ $(function() {
     $("html, body").animate({scrollTop: '0px'});
   });
 
+  $(window).blur(function(){
+    state = 'Inactive';
+  });
+  $(window).focus(function(){
+    state = 'Active';
+    $('title').text('Chatnonymous');
+  });
+
   // Geolocation
   navigator.geolocation.getCurrentPosition(geoSuccess);
 
@@ -69,6 +79,12 @@ $(function() {
 
   function displayUsers(users) {
     $('#users').text(users);
+  }
+
+  function displayNotification() {
+    if(state === "Inactive") {
+      $('title').text('* Chatnonymous');
+    }
   }
 
   function geoSuccess(location) {
@@ -97,7 +113,6 @@ function initialize() {
     center: { lat: 49.863735, lng: -100.556513 },
     zoom: 3,
     disableDefaultUI: true,
-    scrollwheel: false,
     zoomControl: true
   };
   map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
