@@ -47,6 +47,8 @@ form {
     form #m:focus {
       outline: 0;
       box-shadow: 0px 0px 0px 2px #2ecc71 inset; }
+    form #m.timeout {
+      box-shadow: 0px 0px 0px 2px #c0392b inset; }
   form button {
     box-sizing: border-box;
     width: 100px;

@@ -1,6 +1,7 @@
 $(function() {
   var socket = io();
   var userColor;
+  var msgRate = 0;
 
   $('form').submit(function() {
     msg = {
@@ -8,10 +9,22 @@ $(function() {
       userColor: userColor
     }
 
+    if(msgRate > 5) {
+      userTimeout();
+    }
+
   socket.emit('chat message', msg);
+  msgRate++;
   $('#m').val('');
   return false;
   });
+
+  // Rate Limiting
+  setInterval(function() {
+    if(msgRate > 0) {
+      msgRate--;
+    }
+  }, 1000);
 
   socket.on('chat message', function(msg){
     displayMessage(msg);
@@ -61,6 +74,14 @@ $(function() {
     };
     socket.emit('position', position);
   };
+  function userTimeout() {
+    $('#messages').append($('<div class="chat" style="background-color: #c0392b; color: white;">').text('You have been timed out for 30 seconds'));
+    $('#m').addClass('timeout').prop('disabled', true);
+    setTimeout(function() {
+      $('#m').removeClass('timeout').prop('disabled', false);
+    }, 30000);
+
+  }
 });
 
 // Google Maps Code
