@@ -27,8 +27,6 @@ $(function() {
   });
 
   socket.on('locations update', function(locations) {
-    console.log(locations);
-
     for (var i = 0; i < markers.length; i++) {
       markers[i].setMap(null);
     }
