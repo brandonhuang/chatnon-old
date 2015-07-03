@@ -15,6 +15,11 @@ var locations = [];
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
+
+io.on('connection', function(socket) {
+  // Generate custom color for new user
   var user_color = generatePastelColor();
   console.log('a user connected with color', user_color);
 
