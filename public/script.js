@@ -12,7 +12,7 @@ $(function() {
       name: name
     }
 
-    if(msgRate > 3) {
+    if(msgRate > 2) {
       userTimeout();
     }
 
@@ -83,9 +83,9 @@ $(function() {
   // Functions
   function displayMessage(msg) {
     var message = '';
-    if(msg.name !== '' || msg.name !== undefined) {
+    if(msg.name === '' || msg.name === undefined) {} else {
       message += '[ '+ msg.name +' ] ';
-    }
+    } 
     message += msg.text;
     $('#messages').append($('<div class="chat" style="background-color: '+ msg.userColor +';">').text(message));
   }
