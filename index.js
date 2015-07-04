@@ -46,7 +46,9 @@ io.on('connection', function(socket) {
   });
 
   socket.on('chat message', function(msg) {
-    if(msg.userColor && msg.text.length <= 140) {
+    var hslpat = /hsl\(\d+,\s*[\d.]+%,\s*[\d.]+%\)/;
+
+    if(hslpat.test(msg.userColor) && msg.text.length <= 140) {
       io.emit('chat message', msg);
     }
   });
