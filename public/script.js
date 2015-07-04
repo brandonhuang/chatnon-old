@@ -127,8 +127,8 @@ var markers = [];
 
 function initialize() {
   var mapOptions = {
-    center: { lat: 49.863735, lng: -100.556513 },
-    zoom: 3,
+    center: { lat: 0, lng: 0},
+    zoom: 2,
     disableDefaultUI: true,
     zoomControl: true
   };
