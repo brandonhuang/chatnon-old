@@ -84,9 +84,9 @@ $(function() {
   function displayMessage(msg) {
     var tag = '';
     if(msg.name) {
-      tag = '<div class="tag" style="color: '+ msg.userColor +';">'+ msg.name.substr(0, 12) +'</div>';
+      tag = $('<div class="tag" style="color: '+ msg.userColor +';"></div>').text(msg.name.substr(0, 12));
     } 
-    $('#messages').append($('<div class="message" style="background-color: '+ msg.userColor +';">').text(msg.text));
+    $('#messages').append($('<div class="message" style="background-color: '+ msg.userColor +';">').text(msg.text).append(tag));
   }
 
   function displayUsers(users) {
