@@ -86,10 +86,7 @@ $(function() {
     if(msg.name) {
       tag = '<div class="tag" style="color: '+ msg.userColor +';">'+ msg.name.substr(0, 12) +'</div>';
     } 
-    $('#messages').append('<div class="message" style="background-color: '+ msg.userColor +';">' +
-                            tag +
-                          msg.text +
-                          '</div>');
+    $('#messages').append($('<div class="message" style="background-color: '+ msg.userColor +';">').text(msg.text));
   }
 
   function displayUsers(users) {
