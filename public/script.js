@@ -3,7 +3,15 @@ $(function() {
   var userColor;
   var msgRate = 0;
   var state;
-  var name = '';
+
+  // Grab name from localStorage if exists
+  if (localStorage.name) {
+    var name = localStorage.getItem('name');
+    $('#tag').text(name);
+  }
+  else {
+    var name = '';
+  }
 
   $('form').submit(function() {
     msg = {
@@ -32,6 +40,7 @@ $(function() {
   // Usernames
   $('#tag').on('blur', function() {
     name = $(this).text();
+    localStorage.setItem('name', name);
   });
   $('#tag').on('keypress', function(e) {
     if($(this).text().length > 12) {
