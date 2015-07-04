@@ -9,7 +9,7 @@ var server = app.listen(app.get('port'), function() {
 
 var io = require('socket.io').listen(server);
 
-var users = 0;
+var users = [];
 var locations = [];
 
 app.use(express.static('public'));
@@ -19,6 +19,7 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
+
   // Generate custom color for new user
   var user_color = generateColor();
   console.log('a user connected with color', user_color);

@@ -121,7 +121,8 @@ header {
     margin: 8px 10px 8px 0;
     float: right;
     line-height: 30px;
-    min-width: 60px; }
+    min-width: 60px;
+    font-size: 0.8rem; }
   header #users i {
     font-size: 1.5rem; }
   header #users span {

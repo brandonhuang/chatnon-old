@@ -43,7 +43,7 @@ $(function() {
     localStorage.setItem('name', name);
   });
   $('#tag').on('keypress', function(e) {
-    if($(this).text().length > 12) {
+    if($(this).text().length >= 12) {
       e.preventDefault();
     }
   });
