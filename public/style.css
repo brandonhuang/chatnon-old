@@ -98,7 +98,7 @@ header {
   text-align: center; }
   header #color, header #users, header #name {
     display: block;
-    width: 33%;
+    width: 33.3%;
     height: 100%;
     float: left; }
   header #user-color {
@@ -108,15 +108,20 @@ header {
     float: left;
     margin: 10px 0 10px 10px;
     border-radius: 5px; }
-  header #name input {
+  header #name #tag {
     box-sizing: border-box;
     display: inline-block;
-    border: 0;
+    border: 2px solid rgba(255, 255, 255, 0.5);
     background-color: #2c3e50;
     height: 35px;
-    width: 130px;
+    width: auto;
     padding: 0 10px;
-    text-align: center; }
+    text-align: center;
+    border-radius: 5px;
+    margin: 8px 10px 8px 0;
+    float: right;
+    line-height: 30px;
+    min-width: 60px; }
   header #users i {
     font-size: 1.5rem; }
   header #users span {
@@ -131,7 +136,8 @@ header {
     transform: none; }
 
   #chat, #map {
-    border-radius: 0; }
+    border-radius: 0;
+    max-width: 100%; }
 
   #map {
     width: 100%; }

@@ -30,8 +30,13 @@ $(function() {
   }, 3000);
 
   // Usernames
-  $('#username').on('blur', function() {
-    name = $(this).val();
+  $('#tag').on('blur', function() {
+    name = $(this).text();
+  });
+  $('#tag').on('keypress', function(e) {
+    if($(this).text().length > 12) {
+      e.preventDefault();
+    }
   });
 
   socket.on('chat message', function(msg){
@@ -86,7 +91,7 @@ $(function() {
     if(msg.name) {
       tag = $('<div class="tag" style="color: '+ msg.userColor +';"></div>').text(msg.name.substr(0, 12));
     } 
-    $('#messages').append($('<div class="message" style="background-color: '+ msg.userColor +';">').text(msg.text).append(tag));
+    $('#messages').append($('<div class="message" style="background-color: '+ msg.userColor +';">').text(msg.text).prepend(tag));
   }
 
   function displayUsers(users) {
