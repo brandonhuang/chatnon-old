@@ -13,22 +13,19 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0 auto;
-  max-height: 700px;
-  max-width: 1000px;
   margin-top: 0; }
 
 #chat {
   height: 100%;
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   float: left;
   border-radius: 5px 0 0 5px;
   overflow: hidden; }
 
 #map {
   height: 100%;
-  width: 100%;
-  max-width: 500px;
+  width: calc(100% - 600px);
   float: left;
   border-radius: 0 5px 5px 0;
   overflow: hidden;
