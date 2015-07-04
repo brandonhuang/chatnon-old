@@ -82,12 +82,14 @@ $(function() {
 
   // Functions
   function displayMessage(msg) {
-    var message = '';
+    var tag = '';
     if(msg.name) {
-      message += '[ '+ msg.name.substr(0, 12) +' ] ';
+      tag = '<div class="tag" style="color: '+ msg.userColor +';">'+ msg.name.substr(0, 12) +'</div>';
     } 
-    message += msg.text;
-    $('#messages').append($('<div class="chat" style="background-color: '+ msg.userColor +';">').text(message));
+    $('#messages').append('<div class="message" style="background-color: '+ msg.userColor +';">' +
+                            tag +
+                          msg.text +
+                          '</div>');
   }
 
   function displayUsers(users) {
