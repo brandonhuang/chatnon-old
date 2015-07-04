@@ -12,7 +12,7 @@ $(function() {
       name: name
     }
 
-    if(msgRate > 2) {
+    if(msgRate > 3) {
       userTimeout();
     }
 
@@ -27,7 +27,7 @@ $(function() {
     if(msgRate > 0) {
       msgRate--;
     }
-  }, 1000);
+  }, 3000);
 
   // Usernames
   $('#username').on('blur', function() {
@@ -83,8 +83,8 @@ $(function() {
   // Functions
   function displayMessage(msg) {
     var message = '';
-    if(msg.name === '' || msg.name === undefined) {} else {
-      message += '[ '+ msg.name +' ] ';
+    if(msg.name) {
+      message += '[ '+ msg.name.substr(0, 12) +' ] ';
     } 
     message += msg.text;
     $('#messages').append($('<div class="chat" style="background-color: '+ msg.userColor +';">').text(message));
@@ -112,11 +112,11 @@ $(function() {
     socket.emit('position', position);
   };
   function userTimeout() {
-    $('#messages').append($('<div class="chat" style="background-color: #c0392b; color: white;">').text('You have been timed out for 30 seconds'));
+    $('#messages').append($('<div class="chat" style="background-color: #c0392b; color: white;">').text('You have been timed out for 60 seconds'));
     $('#m').addClass('timeout').prop('disabled', true);
     setTimeout(function() {
       $('#m').removeClass('timeout').prop('disabled', false);
-    }, 30000);
+    }, 60000);
 
   }
 });
