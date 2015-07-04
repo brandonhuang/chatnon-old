@@ -98,13 +98,14 @@ header {
 
 @media (max-width: 1000px) {
   .wrap {
-    max-width: 500px;
-    max-height: 100vh;
     top: 0;
     transform: none; }
 
   #chat, #map {
     border-radius: 0; }
+
+  #map {
+    width: 100%; }
 
   #mobile-arrow {
     position: absolute;
