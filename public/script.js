@@ -114,7 +114,7 @@ $(function() {
     socket.emit('position', position);
   };
   function userTimeout() {
-    $('#messages').append($('<div class="chat" style="background-color: #c0392b; color: white;">').text('You have been timed out for 60 seconds'));
+    $('#messages').append($('<div class="chat" style="background-color: white; color: #c0392b; padding: 20px 0;">').text('You have been timed out for 60 seconds'));
     $('#m').addClass('timeout').prop('disabled', true);
     setTimeout(function() {
       $('#m').removeClass('timeout').prop('disabled', false);
