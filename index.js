@@ -46,9 +46,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('chat message', function(msg) {
-    msg.text = msg.text.substr(0, 140);
-
-    if(msg.userColor) {
+    if(msg.userColor && msg.text.length <= 140) {
       io.emit('chat message', msg);
     }
   });
