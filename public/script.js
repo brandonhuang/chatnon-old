@@ -83,7 +83,7 @@ $(function() {
   // Functions
   function displayMessage(msg) {
     var message = '';
-    if(msg.name !== '') {
+    if(msg.name !== '' || msg !== undefined) {
       message += '[ '+ msg.name +' ] ';
     }
     message += msg.text;
