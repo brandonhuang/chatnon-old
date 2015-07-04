@@ -46,6 +46,7 @@ form {
   box-sizing: border-box;
   padding: 10px;
   background-color: #2c3e50;
+  height: 61px;
 
   #m {
     box-sizing: border-box;
@@ -91,7 +92,6 @@ form {
 #messages {
   height: calc(100% - 61px - 50px);
   overflow-y: auto;
-  overflow-x: hidden;
   background-color: #ecf0f1;
 
   div {
@@ -107,20 +107,49 @@ header {
   height: 50px;
   background-color: #2c3e50;
   color: white;
+  line-height: 50px;
+  text-align: center;
+
+  #color, #users, #name {
+    display: block;
+    width: 33%;
+    height: 100%;
+    float: left;
+  }
   
-  .data {
-    text-align: center;
-    line-height: 50px;
+  #user-color {
+    height: 30px;
+    width: 50px;
+    display: inline-block;
+    float: left;
+    margin: 10px 0 10px 20px;
+    border-radius: 5px;
   }
 
-  i {
-    font-size: 1.5rem;
+  #name {
+    input {
+      box-sizing: border-box;
+      display: inline-block;
+      border: 0;
+      background-color: #2c3e50;
+      height: 35px;
+      width: 130px;
+      padding: 0 10px;
+      text-align: center;
+    }
   }
-  span {
-    position: relative;
-    left: 7px;
-    top: -2px;
-    font-size: 1rem;
+
+  #users {
+    i {
+      font-size: 1.5rem;
+    }
+
+    span {
+      position: relative;
+      left: 7px;
+      top: -2px;
+      font-size: 1rem;
+    }
   }
 }
 

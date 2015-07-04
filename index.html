@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, max-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Chatnonymous</title>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://necolas.github.io/normalize.css/3.0.2/normalize.css">
@@ -17,9 +17,15 @@
   <div class="wrap">
     <div id="chat">
       <header>
-        <div class="data">
-          <span id="users"></span>
+        <div id="color">
+          <div id="user-color"></div>
+        </div>
+        <div id="users">
+          <span id="users-online"></span>
           <i class="icon-user"></i>
+        </div>
+        <div id="name">
+          <input id="username" type="text" autocomplete="off" maxlength="14">
         </div>
       </header>
       <div id="messages"></div>

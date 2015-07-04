@@ -3,11 +3,13 @@ $(function() {
   var userColor;
   var msgRate = 0;
   var state;
+  var name = '';
 
   $('form').submit(function() {
     msg = {
       text: $('#m').val(),
-      userColor: userColor
+      userColor: userColor,
+      name: name
     }
 
     if(msgRate > 3) {
@@ -27,6 +29,11 @@ $(function() {
     }
   }, 1000);
 
+  // Usernames
+  $('#username').on('blur', function() {
+    name = $(this).val();
+  });
+
   socket.on('chat message', function(msg){
     displayMessage(msg);
     displayNotification();
@@ -35,6 +42,7 @@ $(function() {
 
   socket.on('color', function(color){
     userColor = color;
+    displayUserColor();
   });
 
   socket.on('users update', function(users) {
@@ -74,17 +82,26 @@ $(function() {
 
   // Functions
   function displayMessage(msg) {
-    $('#messages').append($('<div class="chat" style="background-color: '+ msg.userColor +';">').text(msg.text));
+    var message = '';
+    if(name !== '') {
+      message += '[ '+ msg.name +' ] ';
+    }
+    message += msg.text;
+    $('#messages').append($('<div class="chat" style="background-color: '+ msg.userColor +';">').text(message));
   }
 
   function displayUsers(users) {
-    $('#users').text(users);
+    $('#users-online').text(users);
   }
 
   function displayNotification() {
     if(state === "Inactive") {
       $('title').text('* Chatnonymous');
     }
+  }
+
+  function displayUserColor() {
+    $('#user-color').css('background-color', userColor);
   }
 
   function geoSuccess(location) {
