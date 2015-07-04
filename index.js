@@ -62,6 +62,6 @@ io.on('connection', function(socket) {
 
 function generatePastelColor() {
   var hue = Math.floor(Math.random() * 360);
-  var pastel = 'hsl('+ hue +', 50%, 60%)';
+  var pastel = 'hsl('+ hue +', 50%, 50%)';
   return pastel;
 }
