@@ -47,7 +47,10 @@ io.on('connection', function(socket) {
 
   socket.on('chat message', function(msg) {
     msg.text = msg.text.substr(0, 140);
-    io.emit('chat message', msg);
+
+    if(msg.userColor) {
+      io.emit('chat message', msg);
+    }
   });
 
   socket.on('position', function(position) {
