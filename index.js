@@ -20,7 +20,7 @@ app.get('/', function(req, res) {
 
 io.on('connection', function(socket) {
   // Generate custom color for new user
-  var user_color = generatePastelColor();
+  var user_color = generateColor();
   console.log('a user connected with color', user_color);
 
   // Send user their color
@@ -60,8 +60,10 @@ io.on('connection', function(socket) {
   });
 });
 
-function generatePastelColor() {
+function generateColor() {
   var hue = Math.floor(Math.random() * 360);
-  var pastel = 'hsl('+ hue +', 50%, 50%)';
-  return pastel;
+  var sat = Math.floor(Math.random() * 20 + 40);
+  var lum = Math.floor(Math.random() * 20 + 40);
+  var color = 'hsl('+ hue +', '+ sat +'%, '+ lum +'%)';
+  return color;
 }
