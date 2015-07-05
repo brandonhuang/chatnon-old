@@ -4,6 +4,7 @@ $(function() {
   var userColor;
   var msgRate = 0;
   var state;
+  var usersCon = 0;
 
   // Grab name from localStorage if exists
   if (localStorage.name) {
@@ -13,6 +14,8 @@ $(function() {
   else {
     var name = '';
   }
+
+  updateTitle();
 
   $('form').submit(function() {
     msg = {
@@ -54,7 +57,7 @@ $(function() {
     var currentScrollHeight = $('#messages')[0].scrollHeight;
 
     displayMessage(msg);
-    displayNotification();
+    updateTitle();
 
     if(currentScrollBottom === currentScrollHeight) {
       $('#messages').scrollTop($('#messages')[0].scrollHeight);
@@ -67,7 +70,7 @@ $(function() {
   });
 
   socket.on('users update', function(users) {
-    displayUsers(users);
+    usersCon = users;
   });
 
   socket.on('id', function(id) {
@@ -99,7 +102,7 @@ $(function() {
   });
   $(window).focus(function(){
     state = 'Active';
-    $('title').text('Chatnonymous');
+    updateTitle();
   });
 
   // Geolocation
@@ -118,9 +121,12 @@ $(function() {
     $('#users-online').text(users);
   }
 
-  function displayNotification() {
+  function updateTitle() {
     if(state === "Inactive") {
       $('title').text('! Chatnonymous');
+    }
+    else {
+      $('title').text('Chatnonymous');
     }
   }
 

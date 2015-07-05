@@ -58,7 +58,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('chat message', function(msg) {
-    if(blacklist.indexOf(ip) !== -1 || ip === undefined) { return; }
+    if(blacklist.indexOf(ip) !== -1) { return; }
 
     messages++;
     var now = (new Date().getTime() / 1000) + 1;
@@ -77,8 +77,8 @@ io.on('connection', function(socket) {
 
   socket.on('position', function(position) {
     position.id = socket.id;
-    position.longitude = Math.round(position.longitude * 100)/100;
-    position.latitude = Math.round(position.latitude * 100)/100;
+    position.longitude = Math.round(position.longitude * 25)/25;
+    position.latitude = Math.round(position.latitude * 25)/25;
     locations.push(position);
     io.emit('locations update', locations);
   });
