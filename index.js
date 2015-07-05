@@ -55,7 +55,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('chat message', function(msg) {
-    if(blacklist.indexOf(socket.request.connection.remoteAddress) !== -1 || socket.request.connection.remoteAddress === undefined) { return; }
+    // if(blacklist.indexOf(socket.request.connection.remoteAddress) !== -1 || socket.request.connection.remoteAddress === undefined) { return; }
 
     messages++;
     var now = (new Date().getTime() / 1000) + 1;
