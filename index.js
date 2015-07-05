@@ -20,7 +20,8 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-  console.log(socket.handshake.headers['x-forwarded-for']);
+  var ip = socket.handshake.headers['x-forwarded-for'];
+  console.log('user connected with ip:', ip);
   var startInterval = new Date().getTime() / 1000;
   var messages = 0;
 
@@ -51,19 +52,19 @@ io.on('connection', function(socket) {
 
     io.emit('locations update', locations);
     io.emit('users update', users);
-    console.log('user disconnected');
+    console.log('user disconnected with ip:', ip);
   });
 
   socket.on('chat message', function(msg) {
-    // if(blacklist.indexOf(socket.request.connection.remoteAddress) !== -1 || socket.request.connection.remoteAddress === undefined) { return; }
+    // if(blacklist.indexOf(ip) !== -1 || ip === undefined) { return; }
 
     messages++;
     var now = (new Date().getTime() / 1000) + 1;
     var msgsPerSecond = messages / (now - startInterval);
     
-    if(msgsPerSecond > 2 && blacklist.indexOf(socket.request.connection.remoteAddress) === -1) {
-      console.log('blacklisted', socket.request.connection.remoteAddress);
-      blacklist.push(socket.request.connection.remoteAddress);
+    if(msgsPerSecond > 2 && blacklist.indexOf(ip) === -1) {
+      console.log('blacklisted', ip);
+      blacklist.push(ip);
     }
 
     var hslpat = /hsl\(\d+,\s*[\d.]+%,\s*[\d.]+%\)/;
