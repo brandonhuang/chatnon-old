@@ -20,7 +20,7 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-  console.log(socket.handshake);
+  console.log(socket.handshake.headers.['x-forwarded-for']);
   var startInterval = new Date().getTime() / 1000;
   var messages = 0;
 
