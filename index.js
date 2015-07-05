@@ -20,6 +20,7 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
+  console.log('a user connected with IP:', socket.request.connection.remoteAddress);
   var startInterval = new Date().getTime() / 1000;
   var messages = 0;
 
@@ -30,7 +31,6 @@ io.on('connection', function(socket) {
 
   // Generate custom color for new user
   var user_color = generateColor();
-  console.log('a user connected with color', user_color);
 
   // Send user their color
   socket.emit('color', user_color);
@@ -60,7 +60,6 @@ io.on('connection', function(socket) {
     messages++;
     var now = (new Date().getTime() / 1000) + 1;
     var msgsPerSecond = messages / (now - startInterval);
-    console.log(msgsPerSecond);
     
     if(msgsPerSecond > 2 && blacklist.indexOf(socket.request.connection.remoteAddress) === -1) {
       console.log('blacklisted', socket.request.connection.remoteAddress);
