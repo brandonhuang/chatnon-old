@@ -56,7 +56,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('chat message', function(msg) {
-    // if(blacklist.indexOf(ip) !== -1 || ip === undefined) { return; }
+    if(blacklist.indexOf(ip) !== -1 || ip === undefined) { return; }
 
     messages++;
     var now = (new Date().getTime() / 1000) + 1;
