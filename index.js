@@ -20,7 +20,7 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-  console.log('a user connected with IP:', socket.request.connection.remoteAddress);
+  console.log('a user connected with IP:', socket.request.socket.remoteAddress);
   var startInterval = new Date().getTime() / 1000;
   var messages = 0;
 
