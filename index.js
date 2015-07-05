@@ -39,6 +39,7 @@ io.on('connection', function(socket) {
   // Update current connections
   users++;
   io.emit('users update', users);
+  io.emit('locations update', locations);
 
   socket.on('disconnect', function() {
     users--;
@@ -53,6 +54,7 @@ io.on('connection', function(socket) {
     io.emit('locations update', locations);
     io.emit('users update', users);
     console.log('user disconnected with ip:', ip);
+    console.log('current blacklist:', blacklist);
   });
 
   socket.on('chat message', function(msg) {
@@ -89,22 +91,3 @@ function generateColor() {
   var color = 'hsl('+ hue +', '+ sat +'%, '+ lum +'%)';
   return color;
 }
-
-function getClientIp(req) {
-  var ipAddress;
-  // Amazon EC2 / Heroku workaround to get real client IP
-  var forwardedIpsStr = req.header('x-forwarded-for'); 
-  if (forwardedIpsStr) {
-    // 'x-forwarded-for' header may return multiple IP addresses in
-    // the format: "client IP, proxy 1 IP, proxy 2 IP" so take the
-    // the first one
-    var forwardedIps = forwardedIpsStr.split(',');
-    ipAddress = forwardedIps[0];
-  }
-  if (!ipAddress) {
-    // Ensure getting client IP address still works in
-    // development environment
-    ipAddress = req.connection.remoteAddress;
-  }
-  return ipAddress;
-};

@@ -50,9 +50,15 @@ $(function() {
   });
 
   socket.on('chat message', function(msg){
+    var currentScrollBottom = $('#messages').scrollTop() + $('#messages').height();
+    var currentScrollHeight = $('#messages')[0].scrollHeight;
+
     displayMessage(msg);
     displayNotification();
-    $("#messages").scrollTop($('#messages')[0].scrollHeight);
+
+    if(currentScrollBottom === currentScrollHeight) {
+      $('#messages').scrollTop($('#messages')[0].scrollHeight);
+    }
   });
 
   socket.on('color', function(color){
@@ -114,7 +120,7 @@ $(function() {
 
   function displayNotification() {
     if(state === "Inactive") {
-      $('title').text('* Chatnonymous');
+      $('title').text('! Chatnonymous');
     }
   }
 
