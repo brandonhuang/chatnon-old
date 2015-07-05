@@ -1,5 +1,6 @@
 $(function() {
   var socket = io();
+  var userId;
   var userColor;
   var msgRate = 0;
   var state;
@@ -61,6 +62,10 @@ $(function() {
 
   socket.on('users update', function(users) {
     displayUsers(users);
+  });
+
+  socket.on('id', function(id) {
+    userID = id;
   });
 
   socket.on('locations update', function(locations) {

@@ -9,8 +9,9 @@ var server = app.listen(app.get('port'), function() {
 
 var io = require('socket.io').listen(server);
 
-var users = [];
+var users = 0;
 var locations = [];
+var blacklist = [];
 
 app.use(express.static('public'));
 
@@ -19,6 +20,13 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
+  var startInterval = new Date().getTime() / 1000;
+  var messages = 0;
+
+  setInterval(function() {
+    startInterval = new Date().getTime() / 1000;
+    messages = 0;
+  }, 5000);
 
   // Generate custom color for new user
   var user_color = generateColor();
@@ -47,8 +55,19 @@ io.on('connection', function(socket) {
   });
 
   socket.on('chat message', function(msg) {
-    var hslpat = /hsl\(\d+,\s*[\d.]+%,\s*[\d.]+%\)/;
+    if(blacklist.indexOf(socket.request.connection.remoteAddress) !== -1 || socket.request.connection.remoteAddress === undefined) { return; }
 
+    messages++;
+    var now = (new Date().getTime() / 1000) + 1;
+    var msgsPerSecond = messages / (now - startInterval);
+    console.log(msgsPerSecond);
+    
+    if(msgsPerSecond > 2 && blacklist.indexOf(socket.request.connection.remoteAddress) === -1) {
+      console.log('blacklisted', socket.request.connection.remoteAddress);
+      blacklist.push(socket.request.connection.remoteAddress);
+    }
+
+    var hslpat = /hsl\(\d+,\s*[\d.]+%,\s*[\d.]+%\)/;
     if(hslpat.test(msg.userColor) && msg.text.length <= 140) {
       io.emit('chat message', msg);
     }
