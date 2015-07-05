@@ -71,6 +71,7 @@ $(function() {
 
   socket.on('users update', function(users) {
     usersCon = users;
+    displayUsers();
   });
 
   socket.on('id', function(id) {
@@ -117,8 +118,8 @@ $(function() {
     $('#messages').append($('<div class="message" style="background-color: '+ msg.userColor +';">').text(msg.text).prepend(tag));
   }
 
-  function displayUsers(users) {
-    $('#users-online').text(users);
+  function displayUsers() {
+    $('#users-online').text(usersCon);
   }
 
   function updateTitle() {
