@@ -58,6 +58,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('chat message', function(msg) {
+    console.log(ip, msg);
     if(blacklist.indexOf(ip) !== -1) { return; }
 
     messages++;
