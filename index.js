@@ -63,6 +63,8 @@ io.on('connection', function(socket) {
     console.log(ip, msg);
     if(blacklist.indexOf(ip) !== -1) { return; }
 
+    messages++;
+
     var hslpat = /hsl\(\d+,\s*[\d.]+%,\s*[\d.]+%\)/;
     if(hslpat.test(msg.userColor) && msg.text.length <= 140) {
       io.emit('chat message', msg);
