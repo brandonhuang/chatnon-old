@@ -80,6 +80,8 @@ function displayMessage(msg) {
   if(currentScrollBottom === currentScrollHeight) {
     $('#messages').scrollTop($('#messages')[0].scrollHeight);
   }
+
+  responsiveVoice.speak(msg.text);
 }
 
 function displayUsers() {
