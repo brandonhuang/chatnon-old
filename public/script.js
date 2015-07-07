@@ -1,5 +1,5 @@
 var socket = io();
-var userId, userColor, windowState;
+var userId, userColor, windowState, name;
 var msgRate = 0;
 var usersCon = 0;
 
@@ -132,13 +132,14 @@ function userTimeout() {
 }
 
 function loadName() {
-  if (localStorage.name) {
-    var name = localStorage.getItem('name');
+  if(localStorage.getItem('name')) {
+    name = localStorage.getItem('name');
     $('#tag').text(name);
   }
   else {
-    var name = '';
+    name = '';
   }
+  console.log(name);
 }
 
 function processMessage(event) {
