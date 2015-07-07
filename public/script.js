@@ -139,7 +139,6 @@ function loadName() {
   else {
     name = '';
   }
-  console.log(name);
 }
 
 function processMessage(event) {
