@@ -20,15 +20,17 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
+  var messages = 0;
   var ip = socket.handshake.headers['x-forwarded-for'];
   console.log('user connected with ip:', ip);
-  var startInterval = new Date().getTime() / 1000;
-  var messages = 0;
 
   setInterval(function() {
-    startInterval = new Date().getTime() / 1000;
+    if(messages >= 20 && blacklist.indexOf(ip) === -1) {
+      console.log('! blacklisted:', ip);
+      blacklist.push(ip);
+    }
     messages = 0;
-  }, 5000);
+  }, 10000);
 
   // Generate custom color for new user
   var user_color = generateColor();
@@ -60,15 +62,6 @@ io.on('connection', function(socket) {
   socket.on('chat message', function(msg) {
     console.log(ip, msg);
     if(blacklist.indexOf(ip) !== -1) { return; }
-
-    messages++;
-    var now = (new Date().getTime() / 1000) + 1;
-    var msgsPerSecond = messages / (now - startInterval);
-    
-    if(msgsPerSecond > 2 && blacklist.indexOf(ip) === -1) {
-      console.log('blacklisted', ip);
-      blacklist.push(ip);
-    }
 
     var hslpat = /hsl\(\d+,\s*[\d.]+%,\s*[\d.]+%\)/;
     if(hslpat.test(msg.userColor) && msg.text.length <= 140) {
