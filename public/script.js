@@ -42,7 +42,7 @@ $(function() {
 
   socket.on('id', function(id) {
     userId = id;
-    google.maps.event.addDomListener(window, 'load', initialize);
+    initialize();
   });
 
   socket.on('add marker', displayMarker);
