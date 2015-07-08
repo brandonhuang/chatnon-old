@@ -98,6 +98,7 @@ function displayUserColor() {
 
 function displayAllMarkers(positions) {
   for(var i = 0; i < positions.length; i++) {
+  console.log('display all:', positions[i])
     marker = new google.maps.Marker({
       id: positions[i].id,
       position: { lat: positions[i].latitude, lng: positions[i].longitude },
@@ -108,6 +109,7 @@ function displayAllMarkers(positions) {
 }
 
 function displayMarker(position) {
+
   marker = new google.maps.Marker({
     id: position.id,
     position: { lat: position.latitude, lng: position.longitude },
@@ -196,7 +198,7 @@ function initialize() {
     zoomControl: true
   };
   map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
-
+  socket.emit('map ready');
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

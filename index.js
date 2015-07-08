@@ -42,7 +42,10 @@ io.on('connection', function(socket) {
   // Update current connections
   users++;
   io.emit('users update', users);
-  io.to(socket.id).emit('all markers', markers);
+
+  socket.on('map ready', function() {
+      io.to(socket.id).emit('all markers', markers);
+  });
 
   socket.on('disconnect', function() {
     users--;
