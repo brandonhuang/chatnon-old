@@ -10,7 +10,7 @@ var server = app.listen(app.get('port'), function() {
 var io = require('socket.io').listen(server);
 
 var users = 0;
-var locations = [];
+var markers = [];
 var blacklist = [];
 
 app.use(express.static('public'));
@@ -35,25 +35,26 @@ io.on('connection', function(socket) {
   // Generate custom color for new user
   var user_color = generateColor();
 
-  // Send user their color
+  // Send user their color and ID
   socket.emit('color', user_color);
+  socket.emit('id', socket.id)
 
   // Update current connections
   users++;
   io.emit('users update', users);
-  io.emit('locations update', locations);
+  io.to(socket.id).emit('all markers', markers);
 
   socket.on('disconnect', function() {
     users--;
 
-    for(var i = 0; i < locations.length; i++) {
-      if(locations[i].id == socket.id) {
-        locations.splice(i, 1);
+    for(var i = 0; i < markers.length; i++) {
+      if(markers[i].id == socket.id) {
+        markers.splice(i, 1);
         break;
       }
     }
 
-    io.emit('locations update', locations);
+    io.emit('delete marker', socket.id);
     io.emit('users update', users);
     console.log('user disconnected with ip:', ip);
     console.log('current blacklist:', blacklist);
@@ -72,11 +73,8 @@ io.on('connection', function(socket) {
   });
 
   socket.on('position', function(position) {
-    position.id = socket.id;
-    position.longitude = Math.round(position.longitude * 25)/25;
-    position.latitude = Math.round(position.latitude * 25)/25;
-    locations.push(position);
-    io.emit('locations update', locations);
+    markers.push(position);
+    io.emit('add marker', position);
   });
 });
 

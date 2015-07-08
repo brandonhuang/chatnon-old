@@ -7,6 +7,7 @@ $(function() {
   loadName();
   displayPageTitle();
   decrementMsgRate();
+  fetchLocation();
 
   $('form').on('submit', function(e) {
     processMessage();
@@ -40,12 +41,12 @@ $(function() {
   });
 
   socket.on('id', function(id) {
-    userID = id;
+    userId = id;
   });
 
-  socket.on('locations update', function(locations) {
-    displayMarkers(locations);
-  });
+  socket.on('add marker', displayMarker);
+  socket.on('delete marker', deleteMarker);
+  socket.on('all markers', displayAllMarkers)
 
   // Mobile arrow behaviour
   $('#mobile-arrow').on('click', function() {
@@ -60,10 +61,6 @@ $(function() {
     displayPageTitle();
     $('#m').focus();
   });
-
-  // Geolocation
-  navigator.geolocation.getCurrentPosition(geoSuccess);
-
 });
 
 // Functions
@@ -99,27 +96,49 @@ function displayUserColor() {
   $('#user-color').css('background-color', userColor);
 }
 
-function displayMarkers(locations) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(null);
-  }
-  markers = [];
-
-  locations.forEach(function(position) {
+function displayAllMarkers(positions) {
+  for(var i = 0; i < positions.length; i++) {
     marker = new google.maps.Marker({
-      position: { lat: position.latitude, lng: position.longitude },
+      id: positions[i].id,
+      position: { lat: positions[i].latitude, lng: positions[i].longitude },
       map: map
     });
-
     markers.push(marker);
+  }
+}
+
+function displayMarker(position) {
+  marker = new google.maps.Marker({
+    id: position.id,
+    position: { lat: position.latitude, lng: position.longitude },
+    map: map
   });
+
+  markers.push(marker);
+  console.log(markers);
+}
+
+function deleteMarker(id) {
+  for(var i = 0; i < markers.length; i++) {
+    if(markers[i].id == id) {
+      markers[i].setMap(null);
+      markers.splice(i, 1);
+      break;
+    }
+  }
+}
+
+function fetchLocation() {
+  navigator.geolocation.getCurrentPosition(geoSuccess);
 }
 
 function geoSuccess(location) {
   position = {
-    latitude: location.coords.latitude,
-    longitude: location.coords.longitude
+    id: userId,
+    latitude: Math.round(location.coords.latitude * 25)/25,
+    longitude: Math.round(location.coords.longitude * 25)/25
   };
+
   socket.emit('position', position);
 };
 
