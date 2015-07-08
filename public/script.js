@@ -77,7 +77,7 @@ function displayMessage(msg) {
   } 
   $('#messages').append($('<div class="message" style="background-color: '+ msg.userColor +';">').text(msg.text).prepend(tag));
 
-  if(currentScrollBottom === currentScrollHeight) {
+  if(currentScrollBottom >= currentScrollHeight - 50) {
     $('#messages').scrollTop($('#messages')[0].scrollHeight);
   }
 }
