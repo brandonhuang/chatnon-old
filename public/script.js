@@ -81,7 +81,7 @@ function displayMessage(msg) {
     $('#messages').scrollTop($('#messages')[0].scrollHeight);
   }
 
-  responsiveVoice.speak(msg.text);
+  responsiveVoice.speak(msg.text, "Japanese Female");
 }
 
 function displayUsers() {
