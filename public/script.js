@@ -99,7 +99,6 @@ function displayUserColor() {
 
 function displayAllMarkers(positions) {
   for(var i = 0; i < positions.length; i++) {
-  console.log('display all:', positions[i])
     marker = new google.maps.Marker({
       id: positions[i].id,
       position: { lat: positions[i].latitude, lng: positions[i].longitude },
@@ -110,7 +109,6 @@ function displayAllMarkers(positions) {
 }
 
 function displayMarker(position) {
-
   marker = new google.maps.Marker({
     id: position.id,
     position: { lat: position.latitude, lng: position.longitude },
@@ -118,7 +116,6 @@ function displayMarker(position) {
   });
 
   markers.push(marker);
-  console.log(markers);
 }
 
 function deleteMarker(id) {
