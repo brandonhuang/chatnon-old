@@ -42,6 +42,7 @@ $(function() {
 
   socket.on('id', function(id) {
     userId = id;
+    google.maps.event.addDomListener(window, 'load', initialize);
   });
 
   socket.on('add marker', displayMarker);
@@ -200,8 +201,6 @@ function initialize() {
   map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
   socket.emit('map ready');
 }
-
-google.maps.event.addDomListener(window, 'load', initialize);
 
 
 
