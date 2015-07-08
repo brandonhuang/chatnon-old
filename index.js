@@ -49,15 +49,8 @@ io.on('connection', function(socket) {
 
   socket.on('disconnect', function() {
     users--;
+    deleteMarker(socket);
 
-    for(var i = 0; i < markers.length; i++) {
-      if(markers[i].id == socket.id) {
-        markers.splice(i, 1);
-        break;
-      }
-    }
-
-    io.emit('delete marker', socket.id);
     io.emit('users update', users);
     console.log('user disconnected with ip:', ip);
     console.log('current blacklist:', blacklist);
@@ -76,6 +69,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('position', function(position) {
+    deleteMarker(socket);
     markers.push(position);
     io.emit('add marker', position);
   });
@@ -87,4 +81,14 @@ function generateColor() {
   var lum = Math.floor(Math.random() * 20 + 40);
   var color = 'hsl('+ hue +', '+ sat +'%, '+ lum +'%)';
   return color;
+}
+
+function deleteMarker(socket) {
+  for(var i = 0; i < markers.length; i++) {
+    if(markers[i].id == socket.id) {
+      console.log('deleted marker', markers[i])
+      markers.splice(i, 1);
+    }
+  }
+  io.emit('delete marker', socket.id);
 }
