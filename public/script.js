@@ -7,7 +7,7 @@ $(function() {
   loadName();
   displayPageTitle();
   decrementMsgRate();
-  fetchLocation();
+  initialize();
 
   $('form').on('submit', function(e) {
     processMessage();
@@ -42,7 +42,7 @@ $(function() {
 
   socket.on('id', function(id) {
     userId = id;
-    initialize();
+    fetchLocation();
   });
 
   socket.on('add marker', displayMarker);
