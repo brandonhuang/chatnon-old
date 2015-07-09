@@ -30,24 +30,21 @@ $(function() {
     displayPageTitle();
   });
 
-  socket.on('color', function(color){
-    userColor = color;
-    displayUserColor();
-  });
-
   socket.on('users update', function(users) {
     usersCon = users;
     displayUsers();
   });
 
-  socket.on('id', function(id) {
-    userId = id;
+  socket.on('user data', function(user) {
+    userId = user.id;
+    userColor = user.color;
+    displayUserColor();
     fetchLocation();
   });
 
   socket.on('add marker', displayMarker);
   socket.on('delete marker', deleteMarker);
-  socket.on('all markers', displayAllMarkers)
+  socket.on('all markers', displayAllMarkers);
 
   // Mobile arrow behaviour
   $('#mobile-arrow').on('click', function() {
@@ -99,22 +96,18 @@ function displayUserColor() {
 
 function displayAllMarkers(positions) {
   for(var i = 0; i < positions.length; i++) {
-    marker = new google.maps.Marker({
-      id: positions[i].id,
-      position: { lat: positions[i].latitude, lng: positions[i].longitude },
-      map: map
-    });
-    markers.push(marker);
+    displayMarker(positions[i]);
   }
 }
 
 function displayMarker(position) {
-  marker = new google.maps.Marker({
+  var latlng = new google.maps.LatLng(position.latitude, position.longitude);
+  var marker = new UserMarker({
     id: position.id,
-    position: { lat: position.latitude, lng: position.longitude },
+    latlng: latlng,
+    color: position.color,
     map: map
   });
-
   markers.push(marker);
 }
 
@@ -136,7 +129,8 @@ function geoSuccess(location) {
   position = {
     id: userId,
     latitude: Math.round(location.coords.latitude * 25)/25,
-    longitude: Math.round(location.coords.longitude * 25)/25
+    longitude: Math.round(location.coords.longitude * 25)/25,
+    color: userColor
   };
 
   socket.emit('position', position);
@@ -195,6 +189,7 @@ function initialize() {
     disableDefaultUI: true,
     zoomControl: true
   };
+
   map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
   socket.emit('map ready');
 }

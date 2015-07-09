@@ -33,11 +33,13 @@ io.on('connection', function(socket) {
   }, 10000);
 
   // Generate custom color for new user
-  var user_color = generateColor();
+  var user = {
+    color: generateColor(),
+    id: socket.id
+  }
 
   // Send user their color and ID
-  socket.emit('color', user_color);
-  socket.emit('id', socket.id)
+  socket.emit('user data', user);
 
   // Update current connections
   users++;
@@ -86,7 +88,6 @@ function generateColor() {
 function deleteMarker(socket) {
   for(var i = 0; i < markers.length; i++) {
     if(markers[i].id == socket.id) {
-      console.log('deleted marker', markers[i])
       markers.splice(i, 1);
     }
   }
