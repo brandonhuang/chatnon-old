@@ -25,10 +25,16 @@ $(function() {
     }
   });
 
-  socket.on('chat message', function(msg){
+  socket.on('chat message', function(msg) {
     displayMessage(msg);
     displayPageTitle();
   });
+
+  socket.on('chat history', function(msgs) {
+    msgs.forEach(function(msg) {
+      displayMessage(msg);
+    });
+  })
 
   socket.on('users update', function(users) {
     usersCon = users;

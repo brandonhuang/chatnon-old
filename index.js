@@ -12,6 +12,10 @@ var io = require('socket.io').listen(server);
 var users = 0;
 var markers = [];
 var blacklist = [];
+var chatCache = [];
+
+
+
 
 app.use(express.static('public'));
 
@@ -49,6 +53,9 @@ io.on('connection', function(socket) {
       io.to(socket.id).emit('all markers', markers);
   });
 
+  // Send chat cache
+  io.to(socket.id).emit('chat history', chatCache);
+
   socket.on('disconnect', function() {
     users--;
     deleteMarker(socket);
@@ -66,6 +73,7 @@ io.on('connection', function(socket) {
 
     var hslpat = /hsl\(\d+,\s*[\d.]+%,\s*[\d.]+%\)/;
     if(hslpat.test(msg.userColor) && msg.text.length <= 140) {
+      cacheChat(msg);
       io.emit('chat message', msg);
     }
   });
@@ -92,4 +100,14 @@ function deleteMarker(socket) {
     }
   }
   io.emit('delete marker', socket.id);
+}
+
+function cacheChat(msg) {
+  if(chatCache.length >= 25) {
+    chatCache.shift();
+    chatCache.push(msg);
+  }
+  else {
+    chatCache.push(msg);
+  }
 }
