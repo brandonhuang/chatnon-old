@@ -8,7 +8,6 @@ $(function() {
   displayPageTitle();
   decrementMsgRate();
   initialize();
-  fetchLocation();
 
   $('form').on('submit', function(e) {
     processMessage();
@@ -193,6 +192,7 @@ function initialize() {
 
   map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
   socket.emit('map ready');
+  fetchLocation();
 }
 
 
