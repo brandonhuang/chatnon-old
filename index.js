@@ -73,6 +73,7 @@ io.on('connection', function(socket) {
 
     var hslpat = /hsl\(\d+,\s*[\d.]+%,\s*[\d.]+%\)/;
     if(hslpat.test(msg.userColor) && msg.text.length <= 140) {
+
       cacheChat(msg);
       io.emit('chat message', msg);
     }
@@ -80,6 +81,7 @@ io.on('connection', function(socket) {
 
   socket.on('position', function(position) {
     deleteMarker(socket);
+    position.id = socket.id;
     markers.push(position);
     io.emit('add marker', position);
   });

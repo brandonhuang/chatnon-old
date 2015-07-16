@@ -1,5 +1,5 @@
 var socket = io();
-var userId, userColor, windowState, name;
+var userColor, windowState, name;
 var msgRate = 0;
 var usersCon = 0;
 
@@ -42,7 +42,6 @@ $(function() {
   });
 
   socket.on('user data', function(user) {
-    userId = user.id;
     userColor = user.color;
     displayUserColor();
     fetchLocation();
@@ -133,7 +132,6 @@ function fetchLocation() {
 
 function geoSuccess(location) {
   position = {
-    id: userId,
     latitude: Math.round(location.coords.latitude * 25)/25,
     longitude: Math.round(location.coords.longitude * 25)/25,
     color: userColor
