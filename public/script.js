@@ -1,5 +1,5 @@
 var socket = io();
-var userColor, windowState, name;
+var windowState, name;
 var msgRate = 0;
 var usersCon = 0;
 
@@ -8,6 +8,7 @@ $(function() {
   displayPageTitle();
   decrementMsgRate();
   initialize();
+  fetchLocation();
 
   $('form').on('submit', function(e) {
     processMessage();
@@ -41,10 +42,8 @@ $(function() {
     displayUsers();
   });
 
-  socket.on('user data', function(user) {
-    userColor = user.color;
-    displayUserColor();
-    fetchLocation();
+  socket.on('user color', function(user) {
+    displayUserColor(color);
   });
 
   socket.on('add marker', displayMarker);
@@ -73,9 +72,9 @@ function displayMessage(msg) {
   var tag = '';
 
   if(msg.name) {
-    tag = $('<div class="tag" style="color: '+ msg.userColor +';"></div>').text(msg.name.substr(0, 12));
+    tag = $('<div class="tag" style="color: '+ msg.color +';"></div>').text(msg.name.substr(0, 12));
   } 
-  $('#messages').append($('<div class="message" style="background-color: '+ msg.userColor +';">').text(msg.text).prepend(tag));
+  $('#messages').append($('<div class="message" style="background-color: '+ msg.color +';">').text(msg.text).prepend(tag));
 
   if(currentScrollBottom >= currentScrollHeight - 50) {
     $('#messages').scrollTop($('#messages')[0].scrollHeight);
@@ -95,8 +94,8 @@ function displayPageTitle() {
   }
 }
 
-function displayUserColor() {
-  $('#user-color').css('background-color', userColor);
+function displayUserColor(color) {
+  $('#user-color').css('background-color', color);
 }
 
 function displayAllMarkers(positions) {
@@ -134,7 +133,6 @@ function geoSuccess(location) {
   position = {
     latitude: Math.round(location.coords.latitude * 25)/25,
     longitude: Math.round(location.coords.longitude * 25)/25,
-    color: userColor
   };
 
   socket.emit('position', position);
@@ -161,7 +159,6 @@ function loadName() {
 function processMessage(event) {
   var msg = {
     text: $('#m').val(),
-    userColor: userColor,
     name: name
   }
 

@@ -42,8 +42,8 @@ io.on('connection', function(socket) {
     id: socket.id
   }
 
-  // Send user their color and ID
-  socket.emit('user data', user);
+  // Send user their color
+  socket.emit('user color', user.color);
 
   // Update current connections
   users++;
@@ -71,9 +71,8 @@ io.on('connection', function(socket) {
 
     messages++;
 
-    var hslpat = /hsl\(\d+,\s*[\d.]+%,\s*[\d.]+%\)/;
-    if(hslpat.test(msg.userColor) && msg.text.length <= 140) {
-
+    if(msg.text.length <= 140) {
+      msg.color = user.color;
       cacheChat(msg);
       io.emit('chat message', msg);
     }
@@ -82,6 +81,7 @@ io.on('connection', function(socket) {
   socket.on('position', function(position) {
     deleteMarker(socket);
     position.id = socket.id;
+    position.color = user.color;
     markers.push(position);
     io.emit('add marker', position);
   });
