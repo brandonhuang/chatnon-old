@@ -41,7 +41,7 @@ $(function() {
     displayUsers();
   });
 
-  socket.on('user color', function(user) {
+  socket.on('user color', function(color) {
     displayUserColor(color);
   });
 
