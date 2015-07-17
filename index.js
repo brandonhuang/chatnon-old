@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var crypto = require('crypto');
 
 app.set('port', (process.env.PORT || 3000));
 
@@ -26,7 +27,13 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket) {
   var messages = 0;
   var ip = socket.handshake.headers['x-forwarded-for'];
+  socket.id = crypto.createHash('md5').update(typeof(ip)).digest("hex")
   console.log('user connected with ip:', ip);
+
+  var user = {
+    color: generateColor(),
+    id: socket.id
+  }
 
   setInterval(function() {
     if(messages >= 20 && blacklist.indexOf(ip) === -1) {
@@ -35,12 +42,6 @@ io.on('connection', function(socket) {
     }
     messages = 0;
   }, 10000);
-
-  // Generate custom color for new user
-  var user = {
-    color: generateColor(),
-    id: socket.id
-  }
 
   // Send user their color
   socket.emit('user color', user.color);
@@ -73,6 +74,7 @@ io.on('connection', function(socket) {
 
     if(msg.text.length <= 140) {
       msg.color = user.color;
+      msg.id = user.id
       cacheChat(msg);
       io.emit('chat message', msg);
     }

@@ -54,7 +54,7 @@ $(function() {
     $("html, body").animate({scrollTop: '0px'});
   });
 
-  $(window).blur(function(){
+  $(window).blur(function() {
     windowState = 'Inactive';
   });
   $(window).focus(function(){
@@ -98,6 +98,7 @@ function displayUserColor(color) {
 }
 
 function displayAllMarkers(positions) {
+  console.log(positions);
   for(var i = 0; i < positions.length; i++) {
     displayMarker(positions[i]);
   }
