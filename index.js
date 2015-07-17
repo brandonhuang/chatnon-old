@@ -15,9 +15,6 @@ var markers = [];
 var blacklist = [];
 var chatCache = [];
 
-
-
-
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
@@ -27,12 +24,13 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket) {
   var messages = 0;
   var ip = socket.handshake.headers['x-forwarded-for'];
-  socket.id = crypto.createHash('md5').update(typeof(ip)).digest("hex")
+  var ipHash = crypto.createHash('md5').update(typeof(ip)).digest("hex").trim();
   console.log('user connected with ip:', ip);
 
   var user = {
     color: generateColor(),
-    id: socket.id
+    id: socket.id,
+    persistentId: ipHash
   }
 
   setInterval(function() {
@@ -74,7 +72,7 @@ io.on('connection', function(socket) {
 
     if(msg.text.length <= 140) {
       msg.color = user.color;
-      msg.id = user.id
+      msg.persistentId = user.persistentId;
       cacheChat(msg);
       io.emit('chat message', msg);
     }

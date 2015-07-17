@@ -2,6 +2,7 @@ var socket = io();
 var windowState, name;
 var msgRate = 0;
 var usersCon = 0;
+var muteList = [];
 
 $(function() {
   loadName();
@@ -66,12 +67,16 @@ $(function() {
 
 // Functions
 function displayMessage(msg) {
+  if(muteList.indexOf(msg.persistentId) !== -1) {
+    return;
+  }
+
   var currentScrollBottom = $('#messages').scrollTop() + $('#messages').height();
   var currentScrollHeight = $('#messages')[0].scrollHeight;
   var tag = '';
 
   if(msg.name) {
-    tag = $('<div class="tag" style="color: '+ msg.color +';"></div>').text(msg.name.substr(0, 12));
+    tag = $('<div class="tag" style="color: '+ msg.color +';" onclick="muteUser(&quot;'+ String(msg.persistentId) +'&quot;);"></div>').text(msg.name.substr(0, 12));
   } 
   $('#messages').append($('<div class="message" style="background-color: '+ msg.color +';">').text(msg.text).prepend(tag));
 
@@ -98,7 +103,6 @@ function displayUserColor(color) {
 }
 
 function displayAllMarkers(positions) {
-  console.log(positions);
   for(var i = 0; i < positions.length; i++) {
     displayMarker(positions[i]);
   }
@@ -179,6 +183,12 @@ function decrementMsgRate() {
   }, 3000);
 }
 
+function muteUser(persistentId) {
+  if(muteList.indexOf(persistentId) === -1 && confirm('Are you sure you want to mute this user?')) {
+    muteList.push(persistentId);
+  }
+}
+
 // Google Maps Code
 var map;
 var markers = [];
@@ -195,8 +205,6 @@ function initialize() {
   socket.emit('map ready');
   fetchLocation();
 }
-
-
 
 
 

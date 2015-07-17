@@ -89,7 +89,8 @@ form {
     float: left;
     background-color: #ecf0f1;
     border-radius: 5px;
-    font-size: 0.8rem; }
+    font-size: 0.8rem;
+    cursor: pointer; }
 
 header {
   height: 50px;
