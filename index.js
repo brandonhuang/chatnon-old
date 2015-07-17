@@ -24,7 +24,7 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket) {
   var messages = 0;
   var ip = socket.handshake.headers['x-forwarded-for'];
-  var ipHash = crypto.createHash('md5').update(typeof(ip)).digest("hex").trim();
+  var ipHash = crypto.createHash('md5').update(ip).digest("hex").trim();
   console.log('user connected with ip:', ip);
 
   var user = {
