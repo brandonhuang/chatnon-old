@@ -77,7 +77,10 @@ function displayMessage(msg) {
 
   if(msg.name) {
     tag = $('<div class="tag" style="color: '+ msg.color +';" onclick="muteUser(&quot;'+ String(msg.persistentId) +'&quot;);"></div>').text(msg.name.substr(0, 12));
-  } 
+  }
+  else {
+    tag = $('<div class="tag" style="color: #ecf0f1;" onclick="muteUser(&quot;'+ String(msg.persistentId) +'&quot;);"></div>').text("?");
+  }
   $('#messages').append($('<div class="message" style="background-color: '+ msg.color +';">').text(msg.text).prepend(tag));
 
   if(currentScrollBottom >= currentScrollHeight - 50) {
