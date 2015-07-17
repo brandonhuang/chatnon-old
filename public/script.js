@@ -68,7 +68,10 @@ $(function() {
 // Functions
 function displayMessage(msg) {
   if(muteList.indexOf(msg.persistentId) !== -1) {
+    console.log(muteList.indexOf(msg.persistentId));
     return;
+  } else {
+    console.log('pass')
   }
 
   var currentScrollBottom = $('#messages').scrollTop() + $('#messages').height();
