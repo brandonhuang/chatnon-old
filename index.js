@@ -59,6 +59,9 @@ io.on('connection', function(socket) {
     }
   }, 5000);
 
+  // Get user name
+  io.to(socket.id).emit('name');
+  
   // Send user their color
   socket.emit('user color', users[sessionID].color);
 

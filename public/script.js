@@ -27,6 +27,11 @@ $(function() {
     }
   });
 
+  socket.on('name', function(msg) {
+    var name = $('#tag').text();
+    socket.emit('name', name);
+  })
+
   socket.on('chat message', function(msg) {
     displayMessage(msg);
     displayPageTitle();
