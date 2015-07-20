@@ -33,9 +33,10 @@ io.on('connection', function(socket) {
   var ip = (socket.handshake.headers['x-forwarded-for'] == undefined) ? 'localhost' : socket.handshake.headers['x-forwarded-for'];
   var ipHash = crypto.createHash('md5').update(ip).digest("hex");
   var sessionID = socket.handshake.sessionID;
+  console.log(sessionID);
 
-  if(users.sessionID === undefined) {
-    users.sessionID = {
+  if(users[sessionID] === undefined) {
+    users[sessionID] = {
       color: generateColor(),
       name: '',
       ip: ip,
@@ -45,21 +46,23 @@ io.on('connection', function(socket) {
     };
   }
   else {
-    users.sessionID.instances++;
+    users[sessionID].instances++;
   }
 
-  console.log(users.sessionID);
+  console.log(users);
 
   setInterval(function() {
-    if(users.sessionID.messages >= 20 && blacklist.indexOf(ip) === -1) {
-      console.log('! blacklisted:', ip);
-      blacklist.push(ip);
+    if(users[sessionID]) {
+      if(users[sessionID].messages >= 10 && blacklist.indexOf(ip) === -1) {
+        console.log('! blacklisted:', ip);
+        blacklist.push(ip);
+      }
+      users[sessionID].messages = 0;
     }
-    users.sessionID.messages = 0;
-  }, 10000);
+  }, 5000);
 
   // Send user their color
-  socket.emit('user color', users.sessionID.color);
+  socket.emit('user color', users[sessionID].color);
 
   // Update current connections
   io.emit('users update', Object.keys(users).length);
@@ -72,19 +75,19 @@ io.on('connection', function(socket) {
   io.to(socket.id).emit('chat history', chatCache);
 
   socket.on('name', function(name) {
-    users.sessionID.name = name;
+    users[sessionID].name = name;
   });
 
   socket.on('chat message', function(msg) {
-    console.log(ip, users.sessionID.name, ':', msg.text);
+    console.log(ip, users[sessionID].name, ':', msg.text);
     if(blacklist.indexOf(ip) !== -1) { return; }
 
-    users.sessionID.messages++;
+    users[sessionID].messages++;
 
     if(msg.text.length <= 140) {
-      msg.name = users.sessionID.name;
-      msg.color = users.sessionID.color;
-      msg.persistentId = users.sessionID.ipHash;
+      msg.name = users[sessionID].name;
+      msg.color = users[sessionID].color;
+      msg.persistentId = users[sessionID].ipHash;
       cacheChat(msg);
       io.emit('chat message', msg);
     }
@@ -93,16 +96,16 @@ io.on('connection', function(socket) {
   socket.on('position', function(position) {
     deleteMarker(socket);
     position.id = socket.id;
-    position.color = users.sessionID.color;
+    position.color = users[sessionID].color;
     markers.push(position);
     io.emit('add marker', position);
   });
 
   socket.on('disconnect', function() {
-    users.sessionID.instances--;
+    users[sessionID].instances--;
 
-    if(users.sessionID.instances === 0) {
-      delete users.sessionID;
+    if(users[sessionID].instances === 0) {
+      delete users[sessionID];
     }
 
     deleteMarker(socket);
