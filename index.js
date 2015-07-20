@@ -1,7 +1,14 @@
 var express = require('express');
-var app = express();
 var crypto = require('crypto');
+var socketSession = require("express-socket.io-session");
+var session = require("express-session")({
+    secret: "Hnnnnnnnnnnnnnggg",
+    resave: true,
+    saveUninitialized: true
+});
+var app = express();
 
+app.use(session);
 app.set('port', (process.env.PORT || 3000));
 
 var server = app.listen(app.get('port'), function() {
@@ -9,8 +16,9 @@ var server = app.listen(app.get('port'), function() {
 });
 
 var io = require('socket.io').listen(server);
+io.use(socketSession(session));
 
-var users = 0;
+var users = {};
 var markers = [];
 var blacklist = [];
 var chatCache = [];
@@ -22,31 +30,39 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-  var messages = 0;
-  var ip = socket.handshake.headers['x-forwarded-for'];
-  var ipHash = crypto.createHash('md5').update(ip).digest("hex").trim();
-  console.log('user connected with ip:', ip);
+  var ip = (socket.handshake.headers['x-forwarded-for'] == undefined) ? 'localhost' : socket.handshake.headers['x-forwarded-for'];
+  var ipHash = crypto.createHash('md5').update(ip).digest("hex");
+  var sessionID = socket.handshake.sessionID;
 
-  var user = {
-    color: generateColor(),
-    id: socket.id,
-    persistentId: ipHash
+  if(users.sessionID === undefined) {
+    users.sessionID = {
+      color: generateColor(),
+      name: '',
+      ip: ip,
+      ipHash: ipHash,
+      instances: 1,
+      messages: 0
+    };
+  }
+  else {
+    users.sessionID.instances++;
   }
 
+  console.log(users.sessionID);
+
   setInterval(function() {
-    if(messages >= 20 && blacklist.indexOf(ip) === -1) {
+    if(users.sessionID.messages >= 20 && blacklist.indexOf(ip) === -1) {
       console.log('! blacklisted:', ip);
       blacklist.push(ip);
     }
-    messages = 0;
+    users.sessionID.messages = 0;
   }, 10000);
 
   // Send user their color
-  socket.emit('user color', user.color);
+  socket.emit('user color', users.sessionID.color);
 
   // Update current connections
-  users++;
-  io.emit('users update', users);
+  io.emit('users update', Object.keys(users).length);
 
   socket.on('map ready', function() {
       io.to(socket.id).emit('all markers', markers);
@@ -55,24 +71,20 @@ io.on('connection', function(socket) {
   // Send chat cache
   io.to(socket.id).emit('chat history', chatCache);
 
-  socket.on('disconnect', function() {
-    users--;
-    deleteMarker(socket);
-
-    io.emit('users update', users);
-    console.log('user disconnected with ip:', ip);
-    console.log('current blacklist:', blacklist);
+  socket.on('name', function(name) {
+    users.sessionID.name = name;
   });
 
   socket.on('chat message', function(msg) {
-    console.log(ip, msg);
+    console.log(ip, users.sessionID.name, ':', msg.text);
     if(blacklist.indexOf(ip) !== -1) { return; }
 
-    messages++;
+    users.sessionID.messages++;
 
     if(msg.text.length <= 140) {
-      msg.color = user.color;
-      msg.persistentId = user.persistentId;
+      msg.name = users.sessionID.name;
+      msg.color = users.sessionID.color;
+      msg.persistentId = users.sessionID.ipHash;
       cacheChat(msg);
       io.emit('chat message', msg);
     }
@@ -81,9 +93,23 @@ io.on('connection', function(socket) {
   socket.on('position', function(position) {
     deleteMarker(socket);
     position.id = socket.id;
-    position.color = user.color;
+    position.color = users.sessionID.color;
     markers.push(position);
     io.emit('add marker', position);
+  });
+
+  socket.on('disconnect', function() {
+    users.sessionID.instances--;
+
+    if(users.sessionID.instances === 0) {
+      delete users.sessionID;
+    }
+
+    deleteMarker(socket);
+
+    io.emit('users update', Object.keys(users).length);
+    console.log('user disconnected with ip:', ip);
+    console.log('current blacklist:', blacklist);
   });
 });
 

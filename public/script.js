@@ -1,5 +1,5 @@
 var socket = io();
-var windowState, name;
+var windowState;
 var msgRate = 0;
 var usersCon = 0;
 var muteList = [];
@@ -17,7 +17,8 @@ $(function() {
 
   // Usernames
   $('#tag').on('blur', function() {
-    name = $(this).text();
+    var name = $(this).text();
+    socket.emit('name', name);
     localStorage.setItem('name', name);
   });
   $('#tag').on('keypress', function(e) {
@@ -155,18 +156,15 @@ function userTimeout() {
 
 function loadName() {
   if(localStorage.getItem('name')) {
-    name = localStorage.getItem('name');
+    var name = localStorage.getItem('name');
+    socket.emit('name', name);
     $('#tag').text(name);
-  }
-  else {
-    name = '';
   }
 }
 
 function processMessage(event) {
   var msg = {
-    text: $('#m').val(),
-    name: name
+    text: $('#m').val()
   }
 
   if(msgRate > 3) {
