@@ -33,7 +33,6 @@ io.on('connection', function(socket) {
   var ip = (socket.handshake.headers['x-forwarded-for'] == undefined) ? 'localhost' : socket.handshake.headers['x-forwarded-for'];
   var ipHash = crypto.createHash('md5').update(ip).digest("hex");
   var sessionID = socket.handshake.sessionID;
-  console.log(sessionID);
 
   if(users[sessionID] === undefined) {
     users[sessionID] = {
@@ -44,12 +43,11 @@ io.on('connection', function(socket) {
       instances: 1,
       messages: 0
     };
+    console.log(ip, 'connected');
   }
   else {
     users[sessionID].instances++;
   }
-
-  console.log(users);
 
   setInterval(function() {
     if(users[sessionID]) {
@@ -106,6 +104,7 @@ io.on('connection', function(socket) {
 
     if(users[sessionID].instances === 0) {
       delete users[sessionID];
+      console.log(ip, 'disconnected');
     }
 
     deleteMarker(socket);
