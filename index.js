@@ -59,8 +59,9 @@ io.on('connection', function(socket) {
     }
   }, 5000);
 
-  // Get user name
+  // Get user name and location
   io.to(socket.id).emit('name');
+  io.to(socket.id).emit('location');
   
   // Send user their color
   socket.emit('user color', users[sessionID].color);
@@ -77,6 +78,7 @@ io.on('connection', function(socket) {
 
   socket.on('name', function(name) {
     users[sessionID].name = name;
+    console.log(name);
   });
 
   socket.on('chat message', function(msg) {

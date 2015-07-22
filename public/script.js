@@ -27,10 +27,14 @@ $(function() {
     }
   });
 
-  socket.on('name', function(msg) {
+  socket.on('name', function() {
     var name = $('#tag').text();
     socket.emit('name', name);
-  })
+  });
+
+  socket.on('location', function() {
+    fetchLocation();
+  });
 
   socket.on('chat message', function(msg) {
     displayMessage(msg);
@@ -162,7 +166,7 @@ function userTimeout() {
 function loadName() {
   if(localStorage.getItem('name')) {
     var name = localStorage.getItem('name');
-    socket.emit('name', name);
+    // socket.emit('name', name);
     $('#tag').text(name);
   }
 }
@@ -209,7 +213,6 @@ function initialize() {
 
   map = new google.maps.Map(document.getElementById('map-container'), mapOptions);
   socket.emit('map ready');
-  fetchLocation();
 }
 
 
