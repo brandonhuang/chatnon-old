@@ -1,3 +1,6 @@
+@import '_normalize';
+@import '_fontello';
+
 body, html {
   height: 100%;
   width: 100%;
@@ -150,11 +153,28 @@ header {
       padding: 0 10px;
       text-align: center;
       border-radius: 5px;
-      margin: 8px 10px 8px 0;
+      margin: 8px 0 8px 0;
       float: right;
       line-height: 30px;
       min-width: 60px;
       font-size: 0.8rem;
+    }
+    #lock {
+      float: right;
+      padding: 0 10px;
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: 100ms ease-in-out;
+    }
+    .unlocked {
+      color: #f1c40f;
+
+      &:hover {
+        color: #27ae60;
+      }
+    }
+    .locked {
+      color: #27ae60;
     }
   }
 

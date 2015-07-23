@@ -5,14 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Chatnonymous</title>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="https://necolas.github.io/normalize.css/3.0.2/normalize.css">
-  <link rel="stylesheet" href="fontello.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/css/main.css">
   <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZxFx-A4y4flWRUNhLlEmbnyNy9V9Rfv4"></script>
-  <script src="marker.js"></script>
-  <script src="script.js"></script>
+  <script src="assets/js/main.min.js"></script>
 </head>
 <body>
   <div class="wrap">
@@ -26,6 +23,7 @@
           <i class="icon-user"></i>
         </div>
         <div id="name">
+        <i id="lock" class="icon-lock-open unlocked"></i>
           <span id="tag" type="text" autocomplete="off" maxlength="12" contenteditable="true"></span>
         </div>
       </header>

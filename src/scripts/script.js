@@ -73,6 +73,11 @@ $(function() {
     displayPageTitle();
     $('#m').focus();
   });
+
+  $('#lock').on('click', function() {
+    $(this).toggleClass('unlocked locked');
+    $(this).toggleClass('icon-lock-open icon-lock');
+  });
 });
 
 // Functions

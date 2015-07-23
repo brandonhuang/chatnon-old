@@ -1,5 +1,7 @@
 var express = require('express');
 var crypto = require('crypto');
+var mongoose = require('mongoose');
+var user = require('./app/models/user');
 var socketSession = require("express-socket.io-session");
 var session = require("express-session")({
     secret: "Hnnnnnnnnnnnnnggg",
@@ -18,12 +20,14 @@ var server = app.listen(app.get('port'), function() {
 var io = require('socket.io').listen(server);
 io.use(socketSession(session));
 
+mongoose.connect('mongodb://localhost/chatnonymous');
+
 var users = {};
 var markers = [];
 var blacklist = [];
 var chatCache = [];
 
-app.use(express.static('public'));
+app.use(express.static('dist'));
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
