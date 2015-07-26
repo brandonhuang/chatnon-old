@@ -198,10 +198,10 @@ function displayUsers() {
 
 function displayPageTitle() {
   if(windowState === "Inactive") {
-    $('title').text('! Chatnonymous');
+    $('title').text('! chatnon.');
   }
   else {
-    $('title').text('Chatnonymous');
+    $('title').text('chatnon.');
   }
 }
 
