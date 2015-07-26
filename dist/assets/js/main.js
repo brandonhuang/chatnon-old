@@ -56,10 +56,13 @@ var muteList = [];
 var locked = false;
 
 $(function() {
-  loadName();
-  displayPageTitle();
-  decrementMsgRate();
-  initialize();
+  socket.on('init', function() {
+    loadName();
+    displayPageTitle();
+    decrementMsgRate();
+    initialize();
+    fetchLocation();
+  });
 
   $('form').on('submit', function(e) {
     processMessage();
@@ -124,10 +127,6 @@ $(function() {
     locked = false;
     $('#tag').prop('contenteditable', 'true');
     $('#lock').removeClass('icon-lock').addClass('icon-lock-open');
-  });
-
-  socket.on('location', function() {
-    fetchLocation();
   });
 
   socket.on('chat message', function(msg) {

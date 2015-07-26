@@ -63,9 +63,8 @@ io.on('connection', function(socket) {
     }
   }, 5000);
 
-  // Get user name and location
-  io.to(socket.id).emit('name');
-  io.to(socket.id).emit('location');
+  // Initialize client
+  io.to(socket.id).emit('init');
   
   // Send user their color
   socket.emit('user color', users[sessionID].color);
