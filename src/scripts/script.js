@@ -49,7 +49,6 @@ $(function() {
   });
 
   socket.on('name success', function(name) {
-    console.log(name);
     $('#tag').text(name);
     $('#tag').css('border-color', '#27ae60');
   });
@@ -63,7 +62,6 @@ $(function() {
   });
 
   socket.on('lock success', function(userObj) {
-    console.log(JSON.stringify(userObj));
     localStorage.setItem('userObj', JSON.stringify(userObj));
     locked = true;
     $('#tag').text(userObj.name);
@@ -208,7 +206,6 @@ function userTimeout() {
 
 function loadName() {
   var userObj = localStorage.getItem('userObj');
-  console.log(userObj);
   if(userObj) {
     socket.emit('set name', JSON.parse(userObj));
   }
