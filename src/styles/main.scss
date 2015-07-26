@@ -166,14 +166,10 @@ header {
       cursor: pointer;
       transition: 100ms ease-in-out;
     }
-    .unlocked {
+    .icon-lock-open {
       color: #f1c40f;
-
-      &:hover {
-        color: #27ae60;
-      }
     }
-    .locked {
+    .icon-lock {
       color: #27ae60;
     }
   }

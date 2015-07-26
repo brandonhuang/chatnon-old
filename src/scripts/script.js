@@ -3,6 +3,7 @@ var windowState;
 var msgRate = 0;
 var usersCon = 0;
 var muteList = [];
+var locked = false;
 
 $(function() {
   loadName();
@@ -17,19 +18,62 @@ $(function() {
 
   // Usernames
   $('#tag').on('blur', function() {
-    var name = $(this).text();
-    socket.emit('name', name);
-    localStorage.setItem('name', name);
+    var userObj = {
+      name: $(this).text(),
+      password: 'none'
+    }
+    socket.emit('set name', userObj);
   });
   $('#tag').on('keypress', function(e) {
-    if($(this).text().length >= 12) {
-      e.preventDefault();
+    var name = $(this).text();
+    if(name.length >= 12) {
+      return false;
+    }
+    if(e.which == 13) {
+      $(this).blur();
+      return false;
     }
   });
 
-  socket.on('name', function() {
-    var name = $('#tag').text();
-    socket.emit('name', name);
+  $('#lock').on('click', function() {
+    if(locked) {
+      var userObj = localStorage.getItem('userObj');
+      socket.emit('unlock name', JSON.parse(userObj));
+    } else {
+      var name = $('#tag').text();
+      socket.emit('lock name', name);
+    }
+  });
+
+  socket.on('name success', function(name) {
+    console.log(name);
+    $('#tag').text(name);
+    $('#tag').css('border-color', '#27ae60');
+  });
+
+  socket.on('name fail', function() {
+    $('#tag').css('border-color', '#c0392b');
+  });
+
+  socket.on('name remove', function() {
+    $('#tag').css('border-color', 'rgba(255, 255, 255, 0.5)');
+  });
+
+  socket.on('lock success', function(userObj) {
+    console.log(JSON.stringify(userObj));
+    localStorage.setItem('userObj', JSON.stringify(userObj));
+    locked = true;
+    $('#tag').text(userObj.name);
+    $('#tag').css('border-color', '#27ae60');
+    $('#tag').prop('contenteditable', 'false');
+    $('#lock').removeClass('icon-lock-open').addClass('icon-lock');
+  });
+
+  socket.on('unlock success', function() {
+    localStorage.removeItem('userObj');
+    locked = false;
+    $('#tag').prop('contenteditable', 'true');
+    $('#lock').removeClass('icon-lock').addClass('icon-lock-open');
   });
 
   socket.on('location', function() {
@@ -72,11 +116,6 @@ $(function() {
     windowState = 'Active';
     displayPageTitle();
     $('#m').focus();
-  });
-
-  $('#lock').on('click', function() {
-    $(this).toggleClass('unlocked locked');
-    $(this).toggleClass('icon-lock-open icon-lock');
   });
 });
 
@@ -169,10 +208,10 @@ function userTimeout() {
 }
 
 function loadName() {
-  if(localStorage.getItem('name')) {
-    var name = localStorage.getItem('name');
-    // socket.emit('name', name);
-    $('#tag').text(name);
+  var userObj = localStorage.getItem('userObj');
+  console.log(userObj);
+  if(userObj) {
+    socket.emit('set name', JSON.parse(userObj));
   }
 }
 

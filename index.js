@@ -1,7 +1,7 @@
 var express = require('express');
 var crypto = require('crypto');
 var mongoose = require('mongoose');
-var user = require('./app/models/user');
+var User = require('./app/models/user');
 var socketSession = require("express-socket.io-session");
 var session = require("express-session")({
     secret: "Hnnnnnnnnnnnnnggg",
@@ -11,7 +11,7 @@ var session = require("express-session")({
 var app = express();
 
 app.use(session);
-app.set('port', (process.env.PORT || 3000));
+app.set('port', 80);
 
 var server = app.listen(app.get('port'), function() {
   console.log('Chatnonymous is running on port', app.get('port'));
@@ -27,14 +27,14 @@ var markers = [];
 var blacklist = [];
 var chatCache = [];
 
-app.use(express.static('dist'));
+app.use(express.static(__dirname + '/dist/'));
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
 io.on('connection', function(socket) {
-  var ip = (socket.handshake.headers['x-forwarded-for'] == undefined) ? 'localhost' : socket.handshake.headers['x-forwarded-for'];
+  var ip = socket.handshake.address;
   var ipHash = crypto.createHash('md5').update(ip).digest("hex");
   var sessionID = socket.handshake.sessionID;
 
@@ -80,9 +80,88 @@ io.on('connection', function(socket) {
   // Send chat cache
   io.to(socket.id).emit('chat history', chatCache);
 
-  socket.on('name', function(name) {
-    users[sessionID].name = name;
-    console.log(name);
+  socket.on('set name', function(userObj) {
+    if(userObj.name === '') {
+      users[sessionID].name = '';
+      io.to(socket.id).emit('name remove', '');
+      return;
+    }
+
+
+    var result = searchName(userObj.name, users);
+    if(result) {
+      io.to(socket.id).emit('name fail');
+      console.log('someone else is using that name');
+      return;
+    }
+
+    User.findOne({ username: userObj.name }, function(err, user) {
+      if(err) throw err;
+
+      if(!user) {
+        users[sessionID].name = userObj.name;
+        console.log('set name success for', userObj.name);
+        io.to(socket.id).emit('name success', userObj.name);
+      }
+      else {
+        user.verifyPassword(userObj.password, function(err, isMatch) {
+          if(err) throw err;
+
+          if(isMatch) {
+            users[sessionID].name = userObj.name;
+            console.log(userObj.name, 'has signed in');
+            io.to(socket.id).emit('name success', userObj.name);
+            io.to(socket.id).emit('lock success', userObj);
+          }
+          else {
+            io.to(socket.id).emit('name fail');
+            console.log('password is incorrect');
+          }
+        });
+      }
+    });
+  });
+
+  socket.on('lock name', function() {
+    if(users[sessionID].name === '') return;
+
+    User.findOne({ username: users[sessionID].name }, function(err, user) {
+      if(err) throw err;
+
+      if(!user) {
+        var newUser = User({
+          username: users[sessionID].name,
+          password: users[sessionID].ipHash 
+        });
+        newUser.save(function(err, user) {
+          if(err) throw err;
+
+          console.log(user.username, 'has been locked');
+          io.to(socket.id).emit('lock success', { name: user.username, password: users[sessionID].ipHash });
+        });
+      }
+    });
+  });
+
+  socket.on('unlock name', function(userObj) {
+    User.findOne({ username: userObj.name }, function(err, user) {
+      if(err) throw err;
+
+      if(user) {
+        user.verifyPassword(userObj.password, function(err, isMatch) {
+          if(err) throw err;
+
+          if(isMatch) {
+            user.remove(function(err) {
+              if(err) throw err;
+
+              io.to(socket.id).emit('unlock success');
+              console.log(userObj.name, 'has been unlocked')
+            })
+          }
+        });
+      }
+    });
   });
 
   socket.on('chat message', function(msg) {
@@ -148,5 +227,15 @@ function cacheChat(msg) {
   }
   else {
     chatCache.push(msg);
+  }
+}
+
+function searchName(name, obj) {
+  for(var prop in obj) {
+    if(obj.hasOwnProperty(prop)) {
+      if(obj[prop].name === name) {
+        return prop;
+      }
+    }
   }
 }

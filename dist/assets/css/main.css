@@ -621,13 +621,10 @@ header #name #lock {
   -webkit-transition: 100ms ease-in-out;
           transition: 100ms ease-in-out;
 }
-header #name .unlocked {
+header #name .icon-lock-open {
   color: #f1c40f;
 }
-header #name .unlocked:hover {
-  color: #27ae60;
-}
-header #name .locked {
+header #name .icon-lock {
   color: #27ae60;
 }
 header #users i {
