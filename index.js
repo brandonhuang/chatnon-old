@@ -26,7 +26,7 @@ var chatCache = [];
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.redirect('http://chatnon.com');
 });
 
 io.on('connection', function(socket) {
